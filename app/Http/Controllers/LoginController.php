@@ -6,7 +6,7 @@ use App\Models\User;
 use App\Http\Requests\LoginRequest;
 use App\Http\Resources\LoginResource;
 use Illuminate\Support\Facades\Hash;
-use Symfony\Component\HttpFoundation\Response;
+use App\Exceptions\IncorrectPasswordException;
 
 class LoginController extends Controller
 {
@@ -14,16 +14,16 @@ class LoginController extends Controller
     {
         $credentials = $request->validated();
 
-        $user = User::whereEmail($credentials->email)->first();
+        $user = User::whereEmail($credentials['email'])->first();
 
-        if (!Hash::check($credentials->password, $user->password)) {
-            return response([
-                'message' => 'Invalid password',
-            ], Response::HTTP_UNAUTHORIZED);
+        if (!Hash::check($credentials['password'], $user->password)) {
+            throw new IncorrectPasswordException();
         }
 
         $token = $user->createToken('myapptoken')->plainTextToken;
 
-        return LoginResource::make($user, $token);
+        return LoginResource::make($user)->additional([
+            'token' => $token,
+        ]);
     }
 }

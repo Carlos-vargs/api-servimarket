@@ -2,9 +2,9 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Http\Resources\Json\JsonResource;
 
-class LoginResource extends ResourceCollection
+class LoginResource extends JsonResource
 {
     /**
      * Transform the resource collection into an array.
@@ -18,7 +18,6 @@ class LoginResource extends ResourceCollection
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
-            'token' => $this->token,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

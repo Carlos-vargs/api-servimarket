@@ -21,6 +21,9 @@ class RegisterController extends Controller
 
         $token = $user->createToken('myapptoken')->plainTextToken;
 
-        return RegisterResource::make($user, $token);
+        return RegisterResource::make($user)->additional([
+            'token' => $token,
+        ]);
+
     }
 }

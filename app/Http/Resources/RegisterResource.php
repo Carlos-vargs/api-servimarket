@@ -2,10 +2,8 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Resources\Json\ResourceCollection;
-use Symfony\Component\CssSelector\Parser\Token;
-
-class RegisterResource extends ResourceCollection
+use Illuminate\Http\Resources\Json\JsonResource;
+class RegisterResource extends JsonResource
 {
     /**
      * Transform the resource collection into an array.
@@ -19,7 +17,6 @@ class RegisterResource extends ResourceCollection
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
-            'token' => $this->token,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
