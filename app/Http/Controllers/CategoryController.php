@@ -10,13 +10,14 @@ use App\Models\Category;
 class CategoryController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * get all categories.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
         return CategoryResource::collection(Category::all());
+
     }
 
     /**
@@ -27,7 +28,6 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request)
     {
-
         $category = Category::create($request->validated());
 
         return CategoryResource::make($category);
@@ -58,6 +58,6 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        Category::whereId($id)->delete();
+        Category::findOrFail($id)->delete();
     }
 }

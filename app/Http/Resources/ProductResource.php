@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Product;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ProductResource extends JsonResource
@@ -18,6 +19,8 @@ class ProductResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
+            'rate' => $this->rate,
+            'company' => CompanyResource::make(Product::findOrFail($this->id)->company),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

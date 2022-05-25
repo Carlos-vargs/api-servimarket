@@ -37,19 +37,15 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::put('/products/{id}', 'update');
         Route::delete('/products/{id}', 'destroy');
     });
-
-    Route::controller(CategoryController::class)->group(function () {
-        Route::get('/categories', 'index');
-        Route::post('/categories', 'store');
-        Route::put('/categories/{id}', 'update');
-        Route::delete('/categories/{id}', 'destroy');
-    });
+});
 
 
+Route::controller(CategoryController::class)->group(function () {
+    Route::get('/categories', 'index');
+    Route::post('/categories', 'store');
+    Route::put('/categories/{id}', 'update');
+    Route::delete('/categories/{id}', 'destroy');
 });
 
 Route::post('/login', [LoginController::class, 'index']);
 Route::post('/register', [RegisterController::class, 'index']);
-
-
-

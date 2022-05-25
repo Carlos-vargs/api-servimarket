@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Http\Resources\ProductResource;
+use App\Models\Company;
 use App\Models\Product;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -27,20 +29,16 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-        $product = Product::create($request->validated());
+        $fiels = $request->validated();
+
+        $product = Auth::user()
+            ->companies()
+            ->findOrFail($fiels['company_id'])
+            ->products()
+            ->create($fiels);
+
 
         return ProductResource::make($product);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Product $product)
-    {
-        
     }
 
     /**
@@ -52,14 +50,13 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, $id)
     {
-        //check if the user is authorize to update the product
-
         $product = Product::findOrFail($id);
+
+        $this->authorize('update', $product);
 
         $product->update($request->validated());
 
         return ProductResource::make($product);
-
     }
 
     /**
@@ -70,9 +67,10 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
+        $product = Product::findOrFail($id);
 
-        //check if the user is authorize to delete the product
+        $this->authorize('delete', $product);
 
-        Product::whereId($id)->delete();
+        $product->delete();
     }
 }

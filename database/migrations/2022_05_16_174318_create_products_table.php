@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->longText('description');
+            $table->enum('rate', [1, 2, 3, 4, 5]);
             $table->foreignId('company_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });

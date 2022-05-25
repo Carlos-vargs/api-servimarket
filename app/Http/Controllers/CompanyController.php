@@ -6,6 +6,7 @@ use App\Http\Requests\StoreCompanyRequest;
 use App\Http\Requests\UpdateCompanyRequest;
 use App\Http\Resources\CompanyResource;
 use App\Models\Company;
+use Illuminate\Support\Facades\Auth;
 
 class CompanyController extends Controller
 {
@@ -27,27 +28,24 @@ class CompanyController extends Controller
      */
     public function store(StoreCompanyRequest $request)
     {
-
-        //check if the user is authenticate to create a company
-
-        $company = Company::create($request->validated());
+        $company = Auth::user()->companies()->create($request->validated());
 
         return CompanyResource::make($company);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update a company in the database
      *
      * @param  \App\Http\Requests\UpdateCompanyRequest  $request
-     * @param  \App\Models\Company  $company
+     * @param   $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateCompanyRequest $request,  $id)
+    public function update(UpdateCompanyRequest $request, $id)
     {
 
-        //check if the user is authorize to update the company
-
         $company = Company::findOrFail($id);
+
+        $this->authorize('update', $company);
 
         $company->update($request->validated());
 
@@ -55,16 +53,16 @@ class CompanyController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Company  $company
-     * @return \Illuminate\Http\Response
+     * Remove a company from the database.
+     * @param  $id
      */
     public function destroy($id)
     {
-        //check if the user is authorize to delete the company
-        
-        Company::whereId($id)->delete();
+        $company = Company::findOrFail($id);
+
+        $this->authorize('delete', $company);
+
+        $company->delete();
 
     }
 }

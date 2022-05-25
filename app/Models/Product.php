@@ -13,6 +13,7 @@ class Product extends Model
         'name',
         'description',
         'company_id',
+        'rate',
     ];
 
     /**
