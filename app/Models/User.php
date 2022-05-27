@@ -51,4 +51,14 @@ class User extends Authenticatable
         return $this->hasMany(Company::class);
     }
 
+    /**
+     * Get all of the productRating for the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function productRating()
+    {
+        return $this->hasMany(ProductRating::class);
+    }
+
 }

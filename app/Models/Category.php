@@ -13,6 +13,7 @@ class Category extends Model
         'name',
         'description',
         'company_id',
+        'categories',
     ];
 
     /**
@@ -25,4 +26,10 @@ class Category extends Model
         return $this->belongsToMany(Company::class);
     }
 
+    public static function getCompanies($categoryId)
+    {
+        $companies = Category::findOrFail($categoryId)->companies()->pluck('name');
+
+        return $companies;
+    }
 }

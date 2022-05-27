@@ -15,11 +15,13 @@ class CompanyResource extends JsonResource
      */
     public function toArray($request)
     {
+
         return [
             'id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
-            'owner' => UserResource::make(Company::findOrFail($this->id)->user),
+            'owner' => UserResource::make($this->user),
+            'categories' => Company::getCategories($this->id),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

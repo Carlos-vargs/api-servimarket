@@ -28,7 +28,10 @@ class CompanyController extends Controller
      */
     public function store(StoreCompanyRequest $request)
     {
+
         $company = Auth::user()->companies()->create($request->validated());
+
+        $company->categories()->attach($request->category_id);
 
         return CompanyResource::make($company);
     }
@@ -48,6 +51,8 @@ class CompanyController extends Controller
         $this->authorize('update', $company);
 
         $company->update($request->validated());
+
+        $company->categories()->sync($request->category_id);
 
         return CompanyResource::make($company);
     }

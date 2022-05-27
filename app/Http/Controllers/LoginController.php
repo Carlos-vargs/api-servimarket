@@ -4,8 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Http\Requests\LoginRequest;
-use App\Http\Resources\LoginResource;
-
+use App\Http\Resources\UserResource;
 
 class LoginController extends Controller
 {
@@ -17,7 +16,7 @@ class LoginController extends Controller
 
         $token = $user->createToken('myapptoken')->plainTextToken;
 
-        return LoginResource::make($user)->additional([
+        return UserResource::make($user)->additional([
             'token' => $token,
         ]);
     }

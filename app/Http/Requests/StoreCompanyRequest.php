@@ -25,7 +25,8 @@ class StoreCompanyRequest extends FormRequest
     {
         return [
             'name' => 'required|string|unique:companies,name',
-            'description' => 'string'
+            'description' => 'string',
+            'category_id' => 'array',
         ];
     }
 }

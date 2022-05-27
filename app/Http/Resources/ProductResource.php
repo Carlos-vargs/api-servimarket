@@ -19,8 +19,8 @@ class ProductResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
-            'rate' => $this->rate,
-            'company' => CompanyResource::make(Product::findOrFail($this->id)->company),
+            'rate' => Product::getRate($this->id),
+            'company' => CompanyResource::make($this->company),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

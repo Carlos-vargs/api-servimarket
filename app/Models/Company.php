@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Http\Resources\CategoryResource;
+use App\Http\Resources\UserResource;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -44,6 +46,11 @@ class Company extends Model
         return $this->belongsToMany(Category::class);
     }
 
+    public static function getCategories($companyId)
+    {
+        $categories = Company::findOrFail($companyId)->categories()->pluck('name');
 
+        return $categories;
+    }
 
 }

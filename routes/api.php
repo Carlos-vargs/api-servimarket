@@ -5,6 +5,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductRatingController;
 use App\Http\Controllers\RegisterController;
 use Illuminate\Support\Facades\Route;
 
@@ -37,6 +38,12 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::put('/products/{id}', 'update');
         Route::delete('/products/{id}', 'destroy');
     });
+
+    Route::controller(ProductRatingController::class)->group(function () {
+        Route::post('/product-ratings', 'store');
+        Route::put('/product-ratings/{id}', 'update');
+    });
+
 });
 
 

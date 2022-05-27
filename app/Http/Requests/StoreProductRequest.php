@@ -26,7 +26,6 @@ class StoreProductRequest extends FormRequest
         return [
             'name' => 'string|required',
             'description' => 'string|required',
-            'rate' => 'integer|required',
             'company_id' => 'required|integer',
         ];
     }

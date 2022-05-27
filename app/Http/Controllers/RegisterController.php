@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\RegisterRequest;
-use App\Http\Resources\RegisterResource;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 
 class RegisterController extends Controller
@@ -21,7 +21,7 @@ class RegisterController extends Controller
 
         $token = $user->createToken('myapptoken')->plainTextToken;
 
-        return RegisterResource::make($user)->additional([
+        return UserResource::make($user)->additional([
             'token' => $token,
         ]);
 

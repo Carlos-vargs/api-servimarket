@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 
 class LogoutController extends Controller
 {
@@ -9,9 +10,7 @@ class LogoutController extends Controller
     public function index()
     {
 
-        auth()->user()->tokens->each(function ($token, $key) {
-            $token->delete();
-        });
+        Auth::user()->tokens()->delete();
 
     }
 

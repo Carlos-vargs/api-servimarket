@@ -18,7 +18,7 @@ class CategoryResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'companies' => CompanyResource::collection(Category::findOrFail($this->id)->companies),
+            'companies' => Category::getCompanies($this->id),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

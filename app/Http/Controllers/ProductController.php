@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Http\Resources\ProductResource;
-use App\Models\Company;
 use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 
@@ -36,7 +35,6 @@ class ProductController extends Controller
             ->findOrFail($fiels['company_id'])
             ->products()
             ->create($fiels);
-
 
         return ProductResource::make($product);
     }
