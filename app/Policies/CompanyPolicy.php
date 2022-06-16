@@ -17,9 +17,9 @@ class CompanyPolicy
      * @param  \App\Models\Company  $company
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Company $company)
+    public function update(User $user, Company $company): bool
     {
-        return $user->id === $company->user_id ?: $this->deny('You are not authorized to update this company');
+        return $user->id === $company->user_id;
     }
 
     /**
@@ -29,9 +29,8 @@ class CompanyPolicy
      * @param  \App\Models\Company  $company
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Company $company)
+    public function delete(User $user, Company $company): bool
     {
-        return $user->id === $company->user_id ?: $this->deny('You are not authorized to delete this company');
+        return $user->id === $company->user_id;
     }
-
 }

@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Http\Resources\CompanyResource;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends Model
 {
@@ -22,7 +24,7 @@ class Product extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function company()
+    public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
     }
@@ -32,7 +34,7 @@ class Product extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function rating()
+    public function rating(): HasMany
     {
         return $this->hasMany(ProductRating::class);
     }
@@ -42,5 +44,4 @@ class Product extends Model
         $rate = ProductRating::where('product_id', $id)->avg('rating');
         return $rate;
     }
-
 }
