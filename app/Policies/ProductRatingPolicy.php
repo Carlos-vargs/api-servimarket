@@ -17,7 +17,12 @@ class ProductRatingPolicy
      * @param  \App\Models\ProductRating  $productRating
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, ProductRating $productRating)
+    public function update(User $user, ProductRating $productRating): bool
+    {
+        return $user->id === $productRating->user_id;
+    }
+
+    public function delete(User $user, ProductRating $productRating): bool
     {
         return $user->id === $productRating->user_id;
     }
