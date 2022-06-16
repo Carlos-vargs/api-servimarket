@@ -53,7 +53,7 @@ type ProductRating {
 
 type Query {
     user(id: ID! @eq): User @find
-    users: [User!]! @all @guard
+    users: [User!]! @all
     company(id: ID! @eq): Company @find
     companies: [Company!]! @all
     product(id: ID! @eq): Product @find
