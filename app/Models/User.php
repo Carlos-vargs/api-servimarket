@@ -3,11 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\Contracts\HasApiTokens as HasApiTokensContract;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class User extends Authenticatable implements HasApiTokensContract
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -46,7 +48,7 @@ class User extends Authenticatable
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function companies()
+    public function companies(): HasMany
     {
         return $this->hasMany(Company::class);
     }
@@ -56,9 +58,12 @@ class User extends Authenticatable
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function productRating()
+    public function productRating(): HasMany
     {
         return $this->hasMany(ProductRating::class);
     }
+
+
+
 
 }

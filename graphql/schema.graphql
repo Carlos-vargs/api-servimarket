@@ -1,0 +1,120 @@
+"Adate String wz th tormat -d C.5. 2011-65-23"
+scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
+
+"A datetime string with format Y-m-d H:i:s', e.g. 2018-05-23 13:43:32."
+scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+
+type User {
+    id: ID!
+    name: String!
+    email: String!
+    companies: [Company!]! @hasMany
+    productRating: [ProductRating!]! @hasMany
+    created_at: Date!
+    updated_at: Date!
+}
+
+type Company {
+    id: ID!
+    name: String!
+    user: User! @belongsTo
+    products: [Product!]! @hasMany
+    categories: [Category!]! @belongsToMany
+    description: String
+    created_at: Date!
+    updated_at: Date!
+}
+
+type Product {
+    id: ID!
+    name: String!
+    rating: [ProductRating!]! @hasMany
+    avg: Float @aggregate(relation: "rating", column: "rating", function: AVG)
+    company: Company! @belongsTo
+    description: String
+    created_at: Date!
+    updated_at: Date!
+}
+
+type Category {
+    id: ID!
+    name: String
+    companies: [Company!]! @belongsToMany
+    created_at: Date!
+    updated_at: Date!
+}
+
+type ProductRating {
+    id: ID!
+    rating: Int!
+    user: User! @belongsTo
+    product: Product! @belongsTo
+}
+
+type Query {
+    user(id: ID! @eq): User @find
+    users: [User!]! @all @guard
+    company(id: ID! @eq): Company @find
+    companies: [Company!]! @all
+    product(id: ID! @eq): Product @find
+    products: [Product!]! @all
+    category(id: ID! @eq): Category @find
+    categories: [Category!]! @all
+}
+
+#import sanctum.graphql
+
+input CreateCompanyInput {
+    name: String! @rules(apply: [ "unique:companies,name"])
+    description: String
+    categories: CreateCategoryBelongsToMany
+}
+
+input UpdateCompanyInput {
+    id: ID!
+    name: String! @rules(apply: [ "unique:companies,name"])
+    description: String!
+    categories: CreateCategoryBelongsToMany
+}
+
+input CreateCategoryBelongsToMany {
+    sync: [ID!]
+}
+
+input CreateProductInput {
+    name: String!
+    description: String!
+    company_id: ID!
+}
+
+input UpdateProductInput {
+    id: ID!
+    name: String!
+    description: String
+}
+
+input UpdateCategoryInput {
+    id: ID!
+    name: String! @rules(apply: [ "unique:categories,name"])
+}
+
+input CreateProductRatingInput {
+    product_id: ID! @rules(apply: [ "exists:products,id"])
+    rating: Int! @rules(apply: [  "min:1", "max:5"])
+}
+
+type Mutation {
+    createCompany(input: CreateCompanyInput! @spread): Company @create @guard @inject(context: "user.id", name: "user_id")
+    updateCompany(input: UpdateCompanyInput! @spread): Company @update @guard @can(ability: "update", find: "id")
+    deleteCompany(id: ID!): Company @delete @guard @can(ability: "delete", find: "id")
+    createProduct(input: CreateProductInput! @spread): Product @create @guard @can(ability: "create", injectArgs: true)
+    updateProduct(input: UpdateProductInput! @spread): Product @update @guard @can(ability: "update", find: "id")
+    deleteProduct(id: ID!): Product @delete @guard @can(ability: "delete", find: "id")
+    createCategory(name: String!): Category @create @guard
+    updateCategory(input: UpdateCategoryInput! @spread): Category @update @guard
+    deleteCategory(id: ID!): Category @delete @guard
+    createProductRating(input: CreateProductRatingInput! @spread): ProductRating @create @guard @inject(context: "user.id", name: "user_id")
+    deleteProductRating(id: ID!): ProductRating @delete @guard @can(ability: "delete", find: "id")
+
+}
+

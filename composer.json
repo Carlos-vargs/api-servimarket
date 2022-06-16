@@ -6,10 +6,13 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
+        "daniel-de-wit/lighthouse-sanctum": "^2.0",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^9.11",
         "laravel/sanctum": "^2.15",
-        "laravel/tinker": "^2.7"
+        "laravel/tinker": "^2.7",
+        "mll-lab/laravel-graphql-playground": "^2.6",
+        "nuwave/lighthouse": "^5.53"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
