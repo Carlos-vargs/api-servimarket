@@ -10,19 +10,20 @@ type User {
     email: String!
     companies: [Company!]! @hasMany
     productRating: [ProductRating!]! @hasMany
-    created_at: Date!
-    updated_at: Date!
+    created_at: DateTime!
+    updated_at: DateTime!
 }
 
 type Company {
     id: ID!
     name: String!
     user: User! @belongsTo
+    productCount: Int! @count(relation: "products")
     products: [Product!]! @hasMany
     categories: [Category!]! @belongsToMany
     description: String
-    created_at: Date!
-    updated_at: Date!
+    created_at: DateTime!
+    updated_at: DateTime!
 }
 
 type Product {
@@ -32,16 +33,16 @@ type Product {
     avg: Float @aggregate(relation: "rating", column: "rating", function: AVG)
     company: Company! @belongsTo
     description: String
-    created_at: Date!
-    updated_at: Date!
+    created_at: DateTime!
+    updated_at: DateTime!
 }
 
 type Category {
     id: ID!
     name: String
     companies: [Company!]! @belongsToMany
-    created_at: Date!
-    updated_at: Date!
+    created_at: DateTime!
+    updated_at: DateTime!
 }
 
 type ProductRating {
@@ -52,6 +53,7 @@ type ProductRating {
 }
 
 type Query {
+    me: User @auth
     user(id: ID! @eq): User @find
     users: [User!]! @all
     company(id: ID! @eq): Company @find
@@ -61,8 +63,6 @@ type Query {
     category(id: ID! @eq): Category @find
     categories: [Category!]! @all
 }
-
-#import sanctum.graphql
 
 input CreateCompanyInput {
     name: String! @rules(apply: [ "unique:companies,name"])
@@ -104,17 +104,29 @@ input CreateProductRatingInput {
 }
 
 type Mutation {
-    createCompany(input: CreateCompanyInput! @spread): Company @create @guard @inject(context: "user.id", name: "user_id")
-    updateCompany(input: UpdateCompanyInput! @spread): Company @update @guard @can(ability: "update", find: "id")
-    deleteCompany(id: ID!): Company @delete @guard @can(ability: "delete", find: "id")
-    createProduct(input: CreateProductInput! @spread): Product @create @guard @can(ability: "create", injectArgs: true)
-    updateProduct(input: UpdateProductInput! @spread): Product @update @guard @can(ability: "update", find: "id")
-    deleteProduct(id: ID!): Product @delete @guard @can(ability: "delete", find: "id")
-    createCategory(name: String!): Category @create @guard
-    updateCategory(input: UpdateCategoryInput! @spread): Category @update @guard
-    deleteCategory(id: ID!): Category @delete @guard
-    createProductRating(input: CreateProductRatingInput! @spread): ProductRating @create @guard @inject(context: "user.id", name: "user_id")
-    deleteProductRating(id: ID!): ProductRating @delete @guard @can(ability: "delete", find: "id")
-
+    createCompany(input: CreateCompanyInput! @spread): Company
+    @create @guard @inject(context: "user.id", name: "user_id")
+    updateCompany(input: UpdateCompanyInput! @spread): Company
+    @update @guard @can(ability: "update", find: "id")
+    deleteCompany(id: ID!): Company
+    @delete @guard @can(ability: "delete", find: "id")
+    createProduct(input: CreateProductInput! @spread): Product
+    @create @guard @can(ability: "create", injectArgs: true)
+    updateProduct(input: UpdateProductInput! @spread): Product
+    @update @guard @can(ability: "update", find: "id")
+    deleteProduct(id: ID!): Product
+    @delete @guard @can(ability: "delete", find: "id")
+    createCategory(name: String!): Category
+    @create @guard
+    updateCategory(input: UpdateCategoryInput! @spread): Category
+    @update @guard
+    deleteCategory(id: ID!): Category
+    @delete @guard
+    createProductRating(input: CreateProductRatingInput! @spread): ProductRating
+    @create @guard @inject(context: "user.id", name: "user_id")
+    deleteProductRating(id: ID!): ProductRating
+    @delete @guard @can(ability: "delete", find: "id")
 }
+
+#import sanctum.graphql
 
