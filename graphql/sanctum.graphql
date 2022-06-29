@@ -15,15 +15,15 @@ enum LogoutStatus {
 
 extend type Mutation {
     login(
-        email: String! @rules(apply: [ "string", "email", "exists:users,email"])
-        password: String! @rules( apply: [ "App\\Rules\\checkPassword"])
+        email: String! @rules(apply: [ "required", "email", "string", "exists:users,email"])
+        password: String! @rules( apply: [ "required", "string", "App\\Rules\\checkPassword"])
     ): AutenticationResponse!
     @field(resolver: "App\\GraphQL\\Mutations\\Login")
     register(
-        name: String!
-        email: String! @rules(apply: ["bail", "email", "unique:users,email"])
-        password: String! @rules(apply: ["confirmed", "min:6"])
-        password_confirmation: String!
+        name: String! @rules(apply: [  "required", "string"])
+        email: String! @rules(apply: [  "required", "bail", "email", "string", "unique:users,email"])
+        password: String! @rules(apply: [ "required", "string", "confirmed", "min:6"])
+        password_confirmation: String! 
     ): AutenticationResponse!
     @field(resolver: "App\\GraphQL\\Mutations\\Register")
     logout: LogoutResponse! @guard

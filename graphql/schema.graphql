@@ -65,7 +65,7 @@ type Query {
 }
 
 input CreateCompanyInput {
-    name: String! @rules(apply: [ "unique:companies,name"])
+    name: String! @rules(apply: [  "required", "string", "unique:companies,name"])
     description: String
     categories: CreateCategoryBelongsToMany
 }
@@ -82,7 +82,7 @@ input CreateCategoryBelongsToMany {
 }
 
 input CreateProductInput {
-    name: String!
+    name: String! @rules(apply: [ "required", "string"])
     description: String!
     company_id: ID!
 }
@@ -100,8 +100,10 @@ input UpdateCategoryInput {
 
 input CreateProductRatingInput {
     product_id: ID! @rules(apply: [ "exists:products,id"])
-    rating: Int! @rules(apply: [  "min:1", "max:5"])
+    rating: Int! @rules(apply: [  "required", "min:1", "max:5"])
 }
+
+#import sanctum.graphql
 
 type Mutation {
     createCompany(input: CreateCompanyInput! @spread): Company
@@ -127,6 +129,4 @@ type Mutation {
     deleteProductRating(id: ID!): ProductRating
     @delete @guard @can(ability: "delete", find: "id")
 }
-
-#import sanctum.graphql
 
