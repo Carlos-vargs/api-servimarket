@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -54,16 +55,14 @@ class User extends Authenticatable implements HasApiTokensContract
     }
 
     /**
-     * Get all of the productRating for the User
+     * The productsRated that belong to the User
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function productRating(): HasMany
+    public function productsRated(): BelongsToMany
     {
-        return $this->hasMany(ProductRating::class);
+        return $this->belongsToMany(Product::class, 'product_ratings')
+            ->withPivot('rating')
+            ->withTimestamps();
     }
-
-
-
-
 }
