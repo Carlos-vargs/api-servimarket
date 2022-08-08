@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use App\Http\Resources\CategoryResource;
-use App\Http\Resources\UserResource;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
