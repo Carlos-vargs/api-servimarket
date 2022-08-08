@@ -9,7 +9,7 @@ type User {
     name: String!
     email: String!
     companies: [Company!]! @hasMany
-    productRating: [ProductRating!]! @hasMany
+    productsRated: [Product!]! @belongsToMany
     created_at: DateTime!
     updated_at: DateTime!
 }
@@ -29,8 +29,9 @@ type Company {
 type Product {
     id: ID!
     name: String!
-    rating: [ProductRating!]! @hasMany
-    avg: Float @aggregate(relation: "rating", column: "rating", function: AVG)
+    usersRated: [User!]! @belongsToMany
+    hasRated: Int @method
+    avg: Float @aggregate(relation: "usersRated", column: "product_ratings.rating", function: AVG)
     company: Company! @belongsTo
     description: String
     created_at: DateTime!
@@ -55,13 +56,17 @@ type ProductRating {
 type Query {
     me: User @auth
     user(id: ID! @eq): User @find
-    users: [User!]! @all
+    users(limit: Int @limit): [User!]! @all
     company(id: ID! @eq): Company @find
-    companies: [Company!]! @all
+    companies(limit: Int @limit): [Company!]! @all
     product(id: ID! @eq): Product @find
-    products: [Product!]! @all
+    products(limit: Int @limit): [Product!]! @all
     category(id: ID! @eq): Category @find
-    categories: [Category!]! @all
+    categories(limit: Int @limit): [Category!]! @all
+}
+
+type CreateOrUpdateProductRatingPayload {
+    product: Product!
 }
 
 input CreateCompanyInput {
@@ -83,8 +88,8 @@ input CreateCategoryBelongsToMany {
 
 input CreateProductInput {
     name: String! @rules(apply: [ "required", "string"])
-    description: String!
-    company_id: ID!
+    description: String! @rules(apply: [ "required", "string"])
+    company_id: ID! @rules(apply: [ "required", "exists:companies,id"])
 }
 
 input UpdateProductInput {
@@ -98,9 +103,9 @@ input UpdateCategoryInput {
     name: String! @rules(apply: [ "unique:categories,name"])
 }
 
-input CreateProductRatingInput {
+input CreateOrUpdateProductRatingInput {
     product_id: ID! @rules(apply: [ "exists:products,id"])
-    rating: Int! @rules(apply: [  "required", "min:1", "max:5"])
+    rating: String! @rules(apply: [  "required", "numeric", "min:1", "max:5"])
 }
 
 #import sanctum.graphql
@@ -124,9 +129,9 @@ type Mutation {
     @update @guard
     deleteCategory(id: ID!): Category
     @delete @guard
-    createProductRating(input: CreateProductRatingInput! @spread): ProductRating
-    @create @guard @inject(context: "user.id", name: "user_id")
-    deleteProductRating(id: ID!): ProductRating
+    createOrUpdateProductRating(input: CreateOrUpdateProductRatingInput! @spread): CreateOrUpdateProductRatingPayload!
+    @field(resolver: "App\\GraphQL\\Mutations\\CreateOrUpdateProductRatingPayload")
+    deleteProductRating(id: ID!): CreateOrUpdateProductRatingPayload
     @delete @guard @can(ability: "delete", find: "id")
 }
 

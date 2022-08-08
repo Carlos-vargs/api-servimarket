@@ -4,7 +4,7 @@ namespace App\GraphQL\Mutations;
 
 use Illuminate\Support\Facades\Auth;
 
-final class Logout
+final class LogoutPayload
 {
     /**
      * @param  null  $_
@@ -13,8 +13,10 @@ final class Logout
      */
     public function __invoke($_, array $args): array
     {
-        
-        Auth::user()->tokens()->delete();
+
+        /** @var User $user  */
+        $user = Auth::user();
+        $user->tokens()->delete();
 
         return [
             'status'  => 'TOKEN_REVOKED',

@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-use App\Http\Resources\CompanyResource;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\Auth;
 
 class Product extends Model
 {
@@ -30,18 +30,19 @@ class Product extends Model
     }
 
     /**
-     * Get all of the rating for the Product
+     * The usersRated that belong to the Product
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function rating(): HasMany
+    public function usersRated(): BelongsToMany
     {
-        return $this->hasMany(ProductRating::class);
+        return $this->belongsToMany(User::class, 'product_ratings')
+            ->withPivot('rating')
+            ->withTimestamps();
     }
 
-    public static function getRate($id)
+    public function hasRated(): ?int
     {
-        $rate = ProductRating::where('product_id', $id)->avg('rating');
-        return $rate;
+        return $this->usersRated()->where('user_id', Auth::id())->first()?->pivot?->rating;
     }
 }

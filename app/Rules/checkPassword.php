@@ -49,7 +49,8 @@ class checkPassword implements Rule, DataAwareRule
      */
     public function passes($attribute, $value)
     {
-        $user = User::whereEmail($this->data['email'])->first();
+
+        $user = User::whereEmail($this->data['input']['email'])->first();
 
         return !$user ?: Hash::check($value, $user->password);
     }
