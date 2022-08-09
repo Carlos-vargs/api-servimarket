@@ -4,7 +4,7 @@ namespace App\GraphQL\Mutations;
 
 use App\Models\User;
 
-final class RegisterPayload
+final class Register
 {
     /**
      * @param  null  $_

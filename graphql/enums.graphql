@@ -1,0 +1,4 @@
+enum LogoutStatus {
+    """TOKEN_REVOKED"""
+    TOKEN_REVOKED
+}

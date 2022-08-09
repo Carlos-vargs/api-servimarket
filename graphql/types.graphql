@@ -1,0 +1,62 @@
+type User {
+    id: ID!
+    name: String!
+    email: String!
+    companies: [Company!]! @hasMany
+    productsRated: [Product!]! @belongsToMany
+    createdAt: DateTime! @rename(attribute: "created_at")
+    updatedAt: DateTime! @rename(attribute: "updated_at")
+}
+
+type Company {
+    id: ID!
+    name: String!
+    user: User! @belongsTo
+    productCount: Int! @count(relation: "products")
+    products: [Product!]! @hasMany
+    categories: [Category!]! @belongsToMany
+    description: String
+    createdAt: DateTime! @rename(attribute: "created_at")
+    updatedAt: DateTime! @rename(attribute: "updated_at")
+}
+
+type Product {
+    id: ID!
+    name: String!
+    usersRated: [User!]! @belongsToMany
+    hasRated: Int @method
+    avg: Float @aggregate(relation: "usersRated", column: "product_ratings.rating", function: AVG)
+    company: Company! @belongsTo
+    description: String
+    createdAt: DateTime! @rename(attribute: "created_at")
+    updatedAt: DateTime! @rename(attribute: "updated_at")
+}
+
+type Category {
+    id: ID!
+    name: String
+    companies: [Company!]! @belongsToMany
+    createdAt: DateTime! @rename(attribute: "created_at")
+    updatedAt: DateTime! @rename(attribute: "updated_at")
+}
+
+type ProductRating {
+    id: ID!
+    rating: Int!
+    user: User! @belongsTo
+    product: Product! @belongsTo
+}
+
+type CreateOrUpdateProductRatingPayload {
+    product: Product!
+}
+
+type AutenticationResponsePayload {
+    user: User!
+    token: String!
+}
+
+type LogoutResponsePayload {
+    status: LogoutStatus!
+    message: String!
+}
