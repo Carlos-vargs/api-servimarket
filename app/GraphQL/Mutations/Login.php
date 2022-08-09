@@ -4,7 +4,7 @@ namespace App\GraphQL\Mutations;
 
 use App\Models\User;
 
-final class LoginPayload
+final class Login
 {
     /**
      * @param  null  $_

@@ -4,7 +4,7 @@ namespace App\GraphQL\Mutations;
 
 use Illuminate\Support\Facades\Auth;
 
-final class LogoutPayload
+final class Logout
 {
     /**
      * @param  null  $_

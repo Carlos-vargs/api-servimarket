@@ -5,7 +5,7 @@ namespace App\GraphQL\Mutations;
 use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 
-final class CreateOrUpdateProductRatingPayload
+final class CreateOrUpdateProductRating
 {
     /**
      * @param  null  $_
