@@ -1,0 +1,50 @@
+input LoginInput {
+    email: String! @rules(apply: [ "required", "email", "string", "exists:users,email"])
+    password: String! @rules( apply: [ "required", "string", "App\\Rules\\CheckPassword"])
+}
+
+input RegisterInput {
+    name: String! @rules(apply: [  "required", "string"])
+    email: String! @rules(apply: [  "bail", "required", "email", "string", "unique:users,email"])
+    password: String! @rules(apply: [ "bail", "required", "string", "confirmed", "min:6"])
+    password_confirmation: String!  @rules(apply: [ "bail", "required", "string"])
+}
+
+input CreateCompanyInput {
+    name: String! @rules(apply: [  "required", "string", "unique:companies,name"])
+    description: String
+    categories: CreateCategoryBelongsToMany
+}
+
+input UpdateCompanyInput {
+    id: ID!
+    name: String! @rules(apply: [ "unique:companies,name"])
+    description: String!
+    categories: CreateCategoryBelongsToMany
+}
+
+input CreateCategoryBelongsToMany {
+    sync: [ID!]
+}
+
+input CreateProductInput {
+    name: String! @rules(apply: [ "required", "string"])
+    description: String! @rules(apply: [ "required", "string"])
+    companyId: ID! @rename(attribute: "company_id") @rules(apply: [ "required", "exists:companies,id"])
+}
+
+input UpdateProductInput {
+    id: ID!
+    name: String!
+    description: String
+}
+
+input UpdateCategoryInput {
+    id: ID!
+    name: String! @rules(apply: [ "unique:categories,name"])
+}
+
+input CreateOrUpdateProductRatingInput {
+    productId: ID! @rename(attribute: "product_id") @rules(apply: [ "exists:products,id"])
+    rating: String! @rules(apply: [  "required", "numeric", "min:1", "max:5"])
+}

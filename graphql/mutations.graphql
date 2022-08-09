@@ -1,0 +1,33 @@
+type Mutation {
+    login(input: LoginInput! @spread): AutenticationResponsePayload!
+    @field(resolver: "App\\GraphQL\\Mutations\\Login")
+    register(input: RegisterInput! @spread): AutenticationResponsePayload!
+    @field(resolver: "App\\GraphQL\\Mutations\\Register")
+}
+
+extend type Mutation @guard {
+    createCompany(input: CreateCompanyInput! @spread): Company!
+    @create @inject(context: "user.id", name: "user_id")
+    updateCompany(input: UpdateCompanyInput! @spread): Company!
+    @update @can(ability: "update", find: "id")
+    deleteCompany(id: ID!): Company!
+    @delete @can(ability: "delete", find: "id")
+    createProduct(input: CreateProductInput! @spread): Product!
+    @create @can(ability: "create", injectArgs: true)
+    updateProduct(input: UpdateProductInput! @spread): Product!
+    @update @can(ability: "update", find: "id")
+    deleteProduct(id: ID!): Product!
+    @delete @can(ability: "delete", find: "id")
+    createCategory(name: String!): Category!
+    @create
+    updateCategory(input: UpdateCategoryInput! @spread): Category!
+    @update
+    deleteCategory(id: ID!): Category!
+    @delete
+    createOrUpdateProductRating(input: CreateOrUpdateProductRatingInput! @spread): CreateOrUpdateProductRatingPayload!
+    @field(resolver: "App\\GraphQL\\Mutations\\CreateOrUpdateProductRating")
+    deleteProductRating(id: ID!): CreateOrUpdateProductRatingPayload!
+    @delete @can(ability: "delete", find: "id")
+    logout: LogoutResponsePayload!
+    @field(resolver: "App\\GraphQL\\Mutations\\Logout")
+}

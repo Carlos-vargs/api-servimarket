@@ -1,0 +1,11 @@
+type Query {
+    me: User @auth
+    user(id: ID! @eq): User @find
+    users(limit: Int @limit): [User!]! @all
+    company(id: ID! @eq): Company @find
+    companies(limit: Int @limit): [Company!]! @all
+    product(id: ID! @eq): Product @find
+    products(limit: Int @limit): [Product!]! @all
+    category(id: ID! @eq): Category @find
+    categories(limit: Int @limit): [Category!]! @all
+}

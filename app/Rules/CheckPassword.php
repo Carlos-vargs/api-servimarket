@@ -7,7 +7,7 @@ use Illuminate\Contracts\Validation\DataAwareRule;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
 
-class checkPassword implements Rule, DataAwareRule
+class CheckPassword implements Rule, DataAwareRule
 {
 
     /**
