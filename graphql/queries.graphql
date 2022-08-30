@@ -5,7 +5,7 @@ type Query {
     company(id: ID! @eq): Company @find
     companies(limit: Int @limit): [Company!]! @all
     product(id: ID! @eq): Product @find
-    products(limit: Int @limit): [Product!]! @all
+    products: [Product!]! @paginate
     category(id: ID! @eq): Category @find
     categories(limit: Int @limit): [Category!]! @all
 }
