@@ -30,4 +30,6 @@ extend type Mutation @guard {
     @delete @can(ability: "delete", find: "id")
     logout: LogoutResponsePayload!
     @field(resolver: "App\\GraphQL\\Mutations\\Logout")
+    contactCompanyOwner(input: ContactCompanyOwnerInput! @spread): ContactCompanyOwnerPayload!
+    @field(resolver: "App\\GraphQL\\Mutations\\ContactCompanyOwner")
 }

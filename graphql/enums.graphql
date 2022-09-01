@@ -2,3 +2,10 @@ enum LogoutStatus {
     """TOKEN_REVOKED"""
     TOKEN_REVOKED
 }
+
+enum ContactEmailStatus {
+    """SUCCESSFUll"""
+    SUCCESSFUll
+    """ERROR"""
+    ERROR
+}

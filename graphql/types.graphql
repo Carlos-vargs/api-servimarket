@@ -60,3 +60,7 @@ type LogoutResponsePayload {
     status: LogoutStatus!
     message: String!
 }
+
+type ContactCompanyOwnerPayload {
+    status: ContactEmailStatus!
+}
