@@ -50,7 +50,6 @@ input CreateOrUpdateProductRatingInput {
 }
 
 input ContactCompanyOwnerInput {
-    name: String! @rules(apply: [ "required", "string"])
     emailTo: String! @rules(apply: [ "required", "email", "string", ])
     subject: String! @rules(apply: [ "required", "string"])
     message: String! @rules(apply: [ "required", "string"])
