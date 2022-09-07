@@ -10,6 +10,8 @@
         "laravel/framework": "^9.11",
         "laravel/sanctum": "^2.15",
         "laravel/tinker": "^2.7",
+        "laravel/vapor-cli": "^1.44",
+        "laravel/vapor-core": "^2.23",
         "mll-lab/laravel-graphql-playground": "^2.6",
         "nuwave/lighthouse": "^5.53"
     },
